@@ -9,9 +9,11 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.url === "/api/orders") {
+  if (req.url.startsWith("/api/orders")) {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const status = url.searchParams.get("status");
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ orders: [] }));
+    res.end(JSON.stringify({ orders: [], status: status || null }));
     return;
   }
 

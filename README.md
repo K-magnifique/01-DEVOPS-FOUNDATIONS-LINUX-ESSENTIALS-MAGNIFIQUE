@@ -11,7 +11,7 @@ npm start
 Serves on port 8080 by default (override with `PORT`).
 
 - `GET /health` — liveness check
-- `GET /api/orders` — list orders (stubbed)
+- `GET /api/orders?status=<status>` — list orders, optional status filter
 
 ## Deployment
 
