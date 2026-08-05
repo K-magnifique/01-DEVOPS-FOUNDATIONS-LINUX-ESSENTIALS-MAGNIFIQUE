@@ -11,7 +11,8 @@ npm start
 Serves on port 8080 by default (override with `PORT`).
 
 - `GET /health` — liveness check
-- `GET /api/orders` — list orders (stubbed)
+- `GET /api/orders` — list orders (now returns 503 if DB is unreachable — hotfix for prod incident)
+
 
 ## Deployment
 

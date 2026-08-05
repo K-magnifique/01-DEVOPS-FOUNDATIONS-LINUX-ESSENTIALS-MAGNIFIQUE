@@ -9,7 +9,12 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.url === "/api/orders") {
+    if (req.url === "/api/orders") {
+    if (!process.env.DB_HOST) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "database unavailable" }));
+      return;
+    }
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ orders: [] }));
     return;
