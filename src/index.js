@@ -30,6 +30,3 @@ server.listen(PORT, () => {
   console.log(`Kente Retail order-service listening on port ${PORT}`);
 });
 
-server.listen(PORT, () => {
-  console.log(`Kente Retail order-service listening on port ${PORT}`);
-});
