@@ -33,6 +33,26 @@ the app externally — nothing was watching for that until this audit.
 - **Sharing**: this doc, `BRANCHING.md`, and `ASSUMPTIONS_LOG.md` exist so the
   next handover isn't a repeat of this one.
 
+  ## The value-add we built: a pre-commit secret hook
+
+Beyond the audit itself, we built and merged a `git` pre-commit hook
+(`.githooks/pre-commit`, wired up automatically via `npm install`'s
+`postinstall` script) that scans staged changes for secret-shaped content
+(`PASSWORD=`, `API_KEY=`, AWS-style keys, private-key blocks) and known
+secret-bearing filenames (`*.env`, `*.pem`, `*.key`), blocking the commit
+before it happens.
+
+This directly targets the root cause of the worst finding in this audit: a
+secret sat in `config/local.env` long enough to be committed, then "cleaned
+up" in a later commit without ever being purged from history — requiring a
+full `git filter-repo` rewrite and a forced push to actually fix. A hook that
+blocks the *first* commit is strictly cheaper than any after-the-fact history
+rewrite: no force-push, no coordinating with anyone who already pulled the bad
+commit, no window where the secret was exposed at all. Tested directly before
+merging — a staged `API_KEY=...` value was blocked with a clear error message,
+and legitimate commits pass through unaffected.
+
+
 ## This incident, in DORA terms
 
 **MTTR (Mean Time to Restore)** is the clearest fit: the release was blocked from
