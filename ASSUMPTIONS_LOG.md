@@ -103,3 +103,9 @@ sandbox account to stand in for both.
 - **Noted, not fixed** (explicitly out of scope per brief §5): no TLS, no log
   rotation, no backup policy configured on the EC2 instance. Flagging these as
   real gaps for a production deployment, not addressed here.
+- **Found & fixed (process, not code)**: `BRANCHING.md` states "no direct commits
+  to `main`, ever" — and the two docs before it (this file included) were both
+  committed directly to `main`, which is itself a violation of the convention it
+  documents. Caught after the fact. From this point on, remaining handover
+  documentation goes on a `docs/handover-writeup` branch and is merged via PR,
+  matching the convention rather than contradicting it.
