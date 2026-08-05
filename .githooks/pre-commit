@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+
+pattern='(AKIA[0-9A-Z]{16}|-----BEGIN[A-Z ]*PRIVATE KEY-----|(PASSWORD|SECRET|API_KEY|TOKEN|DB_PASSWORD)[[:space:]]*[=:][[:space:]]*[^[:space:]]+)'
+
+blocked=0
+
+files=$(git diff --cached --name-only --diff-filter=ACM)
+
+for f in $files; do
+  case "$f" in
+    *.env|*local.env|*.pem|*.key)
+      echo "pre-commit: blocked - '$f' looks like a secret/credential file" >&2
+      blocked=1
+      continue
+      ;;
+  esac
+  if git show ":$f" | grep -Eiq "$pattern"; then
+    echo "pre-commit: blocked - possible secret found in '$f'" >&2
+    blocked=1
+  fi
+done
+
+if [ "$blocked" -eq 1 ]; then
+  echo "" >&2
+  echo "Commit blocked: looks like a secret is staged. If this is a false positive," >&2
+  echo "re-run with: git commit --no-verify" >&2
+  exit 1
+fi
+
+exit 0
