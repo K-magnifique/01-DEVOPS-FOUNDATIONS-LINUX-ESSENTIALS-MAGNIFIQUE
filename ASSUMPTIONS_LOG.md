@@ -109,3 +109,10 @@ sandbox account to stand in for both.
   documents. Caught after the fact. From this point on, remaining handover
   documentation goes on a `docs/handover-writeup` branch and is merged via PR,
   matching the convention rather than contradicting it.
+- **Real evidence the pre-commit hook works**: after merging it, the hook itself
+  blocked the commit that added `ONBOARDING.md`'s explanation of the hook — the
+  doc's own example patterns (`PASSWORD=`, `API_KEY=...`) matched the hook's
+  secret-detection regex. A genuine, expected false positive; overridden with
+  `git commit --no-verify` as the hook's own error message instructs. Kept here
+  as concrete proof the hook is actually active and functioning, not just present
+  in the repo unused.
